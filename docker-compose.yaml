@@ -6,8 +6,6 @@ services:
       context: ./nodejs
     container_name: server
     command: bash -c "dockerize -wait tcp://database:3306 -timeout 20s && node ./index.js"
-    ports:
-      - 3000:3000
     networks:
       - nginx_nodejs
     depends_on:
@@ -21,8 +19,6 @@ services:
       MYSQL_DATABASE: nodejs
     volumes:
       - database_data:/var/lib/mysql
-    ports:
-      - 3306:3306
     networks:
       - nginx_nodejs
     
