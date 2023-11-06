@@ -1,0 +1,45 @@
+version: '3'
+
+services:
+  server:
+    build:
+      context: ./nodejs
+    container_name: server
+    command: bash -c "dockerize -wait tcp://database:3306 -timeout 20s && node ./index.js"
+    ports:
+      - 3000:3000
+    networks:
+      - nginx_nodejs
+    depends_on:
+      - database
+  
+  database:
+    image: mysql:8.0
+    container_name: database
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: nodejs
+    volumes:
+      - database_data:/var/lib/mysql
+    ports:
+      - 3306:3306
+    networks:
+      - nginx_nodejs
+    
+  nginx:
+    build:
+      context: ./nginx
+    container_name: nginx
+    ports:
+      - 8080:80
+    networks:
+      - nginx_nodejs
+    depends_on:
+      - server
+
+volumes:
+  database_data:
+
+networks:
+  nginx_nodejs:
+    driver: bridge
