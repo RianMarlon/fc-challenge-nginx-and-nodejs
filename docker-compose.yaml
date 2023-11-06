@@ -5,7 +5,7 @@ services:
     build:
       context: ./nodejs
     container_name: server
-    command: bash -c "dockerize -wait tcp://database:3306 -timeout 20s && node ./index.js"
+    command: bash -c "dockerize -wait tcp://database:3306 -timeout 20s node ./index.js"
     networks:
       - nginx_nodejs
     depends_on:
@@ -26,6 +26,7 @@ services:
     build:
       context: ./nginx
     container_name: nginx
+    command: bash -c "dockerize -wait tcp://server:3000 -timeout 40s /docker-entrypoint.sh nginx -g 'daemon off;'"
     ports:
       - 8080:80
     networks:
