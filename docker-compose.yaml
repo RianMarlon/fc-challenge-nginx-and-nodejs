@@ -5,9 +5,11 @@ services:
     build:
       context: ./nodejs
     container_name: server
-    entrypoint: dockerize -wait tcp://database:3306 -timeout 20s node ./index.js
+    entrypoint: dockerize -wait tcp://database:3306 -timeout 20s npm run dev
     networks:
       - nginx_nodejs
+    volumes:
+      - ./nodejs:/usr/app/src
     depends_on:
       - database
   
