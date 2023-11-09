@@ -33,6 +33,8 @@ services:
       - 8080:80
     networks:
       - nginx_nodejs
+    volumes:
+      - ./nginx/server.conf:/etc/nginx/conf.d/server.conf
     depends_on:
       - server
 
