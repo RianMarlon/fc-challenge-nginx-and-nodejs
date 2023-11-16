@@ -5,7 +5,7 @@ services:
     build:
       context: ./nodejs
     container_name: server
-    entrypoint: dockerize -wait tcp://database:3306 -timeout 20s npm run dev
+    entrypoint: /bin/sh -c "npm i && dockerize -wait tcp://database:3306 -timeout 20s && npm run dev"
     networks:
       - nginx_nodejs
     volumes:
@@ -28,7 +28,7 @@ services:
     build:
       context: ./nginx
     container_name: nginx
-    entrypoint: dockerize -wait tcp://server:3000 -timeout 40s /docker-entrypoint.sh nginx -g 'daemon off;'
+    entrypoint: dockerize -wait tcp://server:3000 -timeout 120s /docker-entrypoint.sh nginx -g 'daemon off;'
     ports:
       - 8080:80
     networks:
